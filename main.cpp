@@ -78,12 +78,37 @@ void occupancyGridMapping(double Robotx, double Roboty, double Robottheta, doubl
 
 void visualization()
 {
-    //TODO: Initialize a plot named Map of size 300x150
-    
-    //TODO: Loop over the log odds values of the cells and plot each cell state. 
+    //Initialize a plot named Map
+    plt::title("Map");
+    plt::xlim(gridWidth  / 2 - robotXOffset, mapWidth  + gridWidth / 2 - robotXOffset);
+    plt::ylim(-mapHeight - gridHeight / 2 + robotYOffset, - gridHeight / 2 + robotYOffset);
+    //plt::xlim(0, (int)(mapWidth / gridWidth));
+    //plt::ylim(0, (int)(mapHeight / gridHeight));
+    plt::xlabel("x [m]");
+    plt::ylabel("y [m]");
+
+    //Loop over the log odds values of the cells and plot each cell state. 
     //Unkown state: green color, occupied state: black color, and free state: red color 
-    
+    for (int x = 0; x < mapWidth / gridWidth; x++) {
+        cout << "Remaining Rows= " << mapWidth / gridWidth - x << endl;
+        for (int y = 0; y < mapHeight / gridHeight; y++) {
+            //const double xi = static_cast<double>(x);
+            //const double yi = static_cast<double>(y);
+            double xi = x * gridWidth + gridWidth / 2 - robotXOffset;
+            double yi = -(y * gridHeight + gridHeight / 2) + robotYOffset;        
+            if(l[x][y] < lfree ){
+                plt::plot({xi}, {yi},"g.");
+            }else if(l[x][y] > locc){
+                plt::plot({xi}, {yi},"k.");
+            }else{
+                plt::plot({xi}, {yi},"r.");
+            }
+        }
+    }
+
     //TODO: Save the image and close the plot 
+    plt::save("./Images/my_map.png");
+    plt::clf();
 }
 
 int main()
